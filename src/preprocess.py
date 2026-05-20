@@ -66,24 +66,41 @@ def standardize_image(image):
     mean, std = cv2.meanStdDev(img_float)
     return (img_float - mean.flatten()) / (std.flatten() + 1e-8)
 
-def preprocess_pipeline(image_path):
-    """Executes full operational pipeline sequentially on a single file path."""
+def preprocess_pipeline(image_path, is_texture_or_diffuse=False):
+    """
+    Master execution pipeline.
+    
+    Args:
+        image_path (str): Path to image file.
+        is_texture_or_diffuse (bool): If True, bypasses localized ROI cropping 
+                                      to preserve broad surface patterns (e.g., wrinkles).
+    """
     raw_img = cv2.imread(image_path)
     if raw_img is None:
         raise ValueError(f"Could not load image at {image_path}")
         
+    # Step 1: Always fix lighting variations across all classes
     color_corrected = gray_world_color_constancy(raw_img)
-    roi, _ = segment_lesion_roi(color_corrected, color_space=config.COLOR_SPACE)
-    resized_img = letterbox_resize(roi, target_size=config.TARGET_SIZE)
     
-    # Visual output used for saving to disk; standardized matrix used for models
+    # Step 2: Conditional Segmentation
+    if is_texture_or_diffuse:
+        # Bypass cropping; use the entire illumination-corrected image context
+        processed_region = color_corrected
+    else:
+        # Isolate the specific object boundary (Best for distinct moles/isolated lesions)
+        processed_region, _ = segment_lesion_roi(color_corrected, color_space=config.COLOR_SPACE)
+    
+    # Step 3 & 4: Resize and standardize uniformly
+    resized_img = letterbox_resize(processed_region, target_size=config.TARGET_SIZE)
     standardized_tensor = standardize_image(resized_img)
+    
     return standardized_tensor, resized_img
 
+
 def run_offline_structuring():
-    """Scans raw folders, mirrors topology, and builds processed_data dataset."""
-    print("Initializing Offline Dataset Preprocessing Run...")
-    extensions = ('*.jpg', '*.jpeg', '*.png', '*.JPG', '*.JPEG', '*.PNG')
+    """Scans raw folders, detects condition type from folder names, and processes accordingly."""
+    print("Initializing Smart Dataset Preprocessing Run...")
+    extensions = ('*.jpg', '*.jpeg', '*.png', '*.webp', '*.JPG', '*.JPEG', '*.PNG', '*.WEBP')
     
     if not os.path.exists(config.RAW_DATA_DIR):
         raise FileNotFoundError(f"Missing target configuration directory: {config.RAW_DATA_DIR}")
@@ -95,17 +112,24 @@ def run_offline_structuring():
             output_folder_path = os.path.join(config.PROCESSED_DATA_DIR, disease_folder)
             os.makedirs(output_folder_path, exist_ok=True)
             
+            # --- SMART SWITCH LOGIC ---
+            # Automatically detect if the class relies on global skin texture or broad coverage
+            folder_lower = disease_folder.lower()
+            is_texture_or_diffuse = any(word in folder_lower for word in ['wrinkles', 'uneven', 'acne', 'atopic'])
+            
             img_paths = []
             for ext in extensions:
                 img_paths.extend(glob.glob(os.path.join(input_folder_path, ext)))
                 
-            print(f"Processing '{disease_folder}' -> Found {len(img_paths)} files.")
+            print(f"Category: '{disease_folder}' | Global Mode: {is_texture_or_diffuse} | Files: {len(img_paths)}")
             
             for path in img_paths:
                 filename = os.path.basename(path)
                 try:
-                    _, visual_img = preprocess_pipeline(path)
+                    # Pass the automatic switch to the pipeline
+                    _, visual_img = preprocess_pipeline(path, is_texture_or_diffuse=is_texture_or_diffuse)
                     cv2.imwrite(os.path.join(output_folder_path, filename), visual_img)
                 except Exception as e:
                     print(f"Failed execution on file {filename}: {e}")
+                    
     print("Preprocessing Complete. Structured directory mirrors successfully updated.")

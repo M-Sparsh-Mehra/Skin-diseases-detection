@@ -14,7 +14,7 @@ class SkinDiseaseDataset(Dataset):
         self.class_to_idx = {cls_name: i for i, cls_name in enumerate(self.classes)}
         
         self.image_samples = []
-        extensions = ('.jpg', '.jpeg', '.png', '.jpg', '.jpeg', '.png')
+        extensions = ('*.jpg', '*.jpeg', '*.png', '*.webp', '*.JPG', '*.JPEG', '*.PNG', '*.WEBP')
         
         # Crawl directories to index absolute image paths and numerical tags
         for cls_name in self.classes:
