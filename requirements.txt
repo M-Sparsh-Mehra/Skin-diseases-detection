@@ -1,9 +1,14 @@
+# using python 3.10 specefically for mediapipe compatibility
 # Core Matrix Operations & Math
-numpy>=1.24.0
+numpy
 
 # Computer Vision & Image Preprocessing
-opencv-python>=4.8.0
+opencv-python
 
 # Deep Learning Framework (Tensors & DataLoaders)
-torch>=2.1.0
-torchvision>=0.16.0
+torch
+torchvision
+
+transformers
+chromadb
+pillow
