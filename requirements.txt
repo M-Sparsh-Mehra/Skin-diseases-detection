@@ -12,4 +12,5 @@ torchvision
 transformers
 chromadb
 pillow
-google-generativeai
+google-genai
+flask

@@ -10,7 +10,7 @@
 import os
 import cv2
 import numpy as np
-from config import RAW_DATA_DIR, PROCESSED_DATA_DIR, FACE_SIZE, REGION_SIZE, VALID_EXTNS
+from src.config import RAW_DATA_DIR, PROCESSED_DATA_DIR, FACE_SIZE, REGION_SIZE, VALID_EXTNS
 
 
 

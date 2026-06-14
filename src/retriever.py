@@ -12,9 +12,8 @@ from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 
 # Import your existing configuration and preprocessing logic
-from config import CHROMA_DB_PATH, COLLECTION_NAME
-from preprocess import preprocess_single_image
-
+from src.config import CHROMA_DB_PATH, COLLECTION_NAME
+from src.preprocess import preprocess_single_image
 # -----------------------------
 # 1. Global Initialization
 # -----------------------------

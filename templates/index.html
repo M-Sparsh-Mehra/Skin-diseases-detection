@@ -1,0 +1,382 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyn ML | Diagnostic Orchestrator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#F8F9FA] text-gray-900 font-sans min-h-screen overflow-hidden">
+
+    <nav class="w-full absolute top-0 left-0 px-12 py-6 flex justify-between items-center z-50">
+        <div class="font-bold text-xl tracking-tight">Skyn ML</div>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="#" class="text-gray-900">Explore</a>
+            <a href="#">Your Skin</a>
+            <a href="#">AI Guidance</a>
+        </div>
+        <button class="border border-gray-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">Contact Us</button>
+    </nav>
+
+    <section class="relative w-full h-screen flex items-center justify-between px-12 pt-16">
+        
+        <div class="relative z-10 w-1/3 flex flex-col gap-6">
+            
+            <div class="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm w-max border border-gray-200">
+                <span class="hero-text text-xs font-medium text-gray-600">Trusted by 10,000+ users</span>
+            </div>
+            
+            <h1 class="hero-text text-6xl md:text-7xl font-normal leading-[1.1] tracking-tight">
+                Unlock <br> your skin's <br> potential
+            </h1>
+            
+            <p class="hero-text text-gray-500 max-w-xs text-lg leading-relaxed">
+                Our AI scans your face and shows what can be improved.
+            </p>
+            
+            <button id="analyzeBtn" class="hero-text bg-white border border-gray-300 shadow-sm text-gray-900 px-8 py-3 rounded-full w-max mt-4 hover:bg-gray-50 transition-colors pointer-events-auto cursor-pointer">
+                Analyze Skin
+            </button>
+        </div>
+
+        <div class="absolute inset-0 flex justify-center items-end z-0 pointer-events-none">
+    <div class="relative w-full max-w-3xl h-[85%] flex justify-center items-end">
+        
+        <img src="/static/model.png" alt="Skin Model" class="object-cover h-full object-bottom opacity-95">
+        
+        <div class="scanner-box absolute top-[22%] left-[58%] flex items-center gap-3">
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm">
+                <span class="text-xs font-semibold tracking-wide text-stone-800">Uneven Tone</span>
+            </div>
+        </div>
+        
+        <div class="scanner-box absolute top-[52%] left-[28%] flex items-center gap-3 flex-row-reverse">
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm">
+                <span class="text-xs font-semibold tracking-wide text-stone-800">Enlarged Pores</span>
+            </div>
+        </div>
+
+        <div class="scanner-box absolute top-[65%] left-[62%] flex items-center gap-3">
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm">
+                <span class="text-xs font-semibold tracking-wide text-stone-800">Fine Lines</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="relative z-10 w-1/3 flex flex-col items-end gap-12">
+            
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-gray-900">95%</h3>
+                <p class="text-sm text-gray-500 max-w-[120px] ml-auto">accurate skin analysis</p>
+            </div>
+            
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-gray-900">30+</h3>
+                <p class="text-sm text-gray-500 max-w-[120px] ml-auto">skin concerns analyzed</p>
+            </div>
+
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-gray-900">7-day</h3>
+                <p class="text-sm text-gray-500 max-w-[120px] ml-auto">personalized routine</p>
+            </div>
+            
+        </div>
+    </section>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        // Wait for the DOM to fully load before animating
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Create a master timeline
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            // A. Animate the Left Column (Typography & Button)
+            // Slides up and fades in, one after the other (staggered)
+            tl.from(".hero-text", {
+                y: 40,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.15,
+                delay: 0.2 // Slight delay when page loads
+            })
+            
+            // B. Animate the Right Column (Stats)
+            // Starts slightly before the left column finishes ("-=0.6" offset)
+            .from(".stat-item", {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15
+            }, "-=0.6")
+            
+            // C. Pop the Scanner Boxes (The "AI" effect)
+            // Uses a 'back' ease so they slightly overshoot their size and bounce back
+            .from(".scanner-box", {
+                scale: 0.5,
+                opacity: 0,
+                duration: 0.7,
+                stagger: 0.2,
+                ease: "back.out(1.7)"
+            }, "-=0.2");
+
+            // D. The Continuous Float (After they pop in)
+            // Makes the boxes gently bob up and down forever
+            gsap.to(".scanner-box", {
+                y: -12,
+                duration: 2.5,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    amount: 1.5,
+                    from: "random"
+                }
+            });
+        });
+
+    // Analyze Skin Button Logic
+    document.getElementById('analyzeBtn').addEventListener('click', () => {
+        // Find the main workspace container (where your upload form is)
+        // Note: Make sure your main <main> tag from the Flask step has an id, e.g., id="pipeline-workspace"
+        const workspace = document.querySelector('main'); 
+        
+        if (workspace) {
+            // Smoothly scroll down to the uploader
+            workspace.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+
+            // Optional: Add a tiny highlight flash to the upload box to draw the eye
+            const uploadBox = document.querySelector('.bg-white.rounded-2xl');
+            if (uploadBox) {
+                setTimeout(() => {
+                    uploadBox.classList.add('ring-4', 'ring-stone-200', 'transition-all', 'duration-500');
+                    setTimeout(() => uploadBox.classList.remove('ring-4', 'ring-stone-200'), 1000);
+                }, 800); // Waits for the scroll to finish
+            }
+        }
+    });
+</script>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyn ML | Diagnostic Orchestrator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-[#F8F9FA] text-stone-900 font-sans min-h-screen overflow-x-hidden">
+
+    <nav class="w-full absolute top-0 left-0 px-12 py-6 flex justify-between items-center z-50">
+        <div class="font-bold text-xl tracking-tight">Skyn ML</div>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-stone-500">
+            <a href="#" class="text-stone-900">Explore</a>
+            <a href="#pipeline-workspace">Your Skin</a>
+            <a href="#">AI Guidance</a>
+        </div>
+        <button class="border border-stone-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-stone-50 transition-colors">Contact Us</button>
+    </nav>
+
+    <section class="relative w-full h-screen flex items-center justify-between px-12 pt-16 border-b border-stone-200">
+        
+        <div class="relative z-10 w-1/3 flex flex-col gap-6">
+            <div class="hero-text inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm w-max border border-stone-200">
+                <span class="text-xs font-medium text-stone-600">Trusted by 10,000+ users</span>
+            </div>
+            
+            <h1 class="hero-text text-6xl md:text-7xl font-normal leading-[1.1] tracking-tight">
+                Unlock <br> your skin's <br> potential
+            </h1>
+            
+            <p class="hero-text text-stone-500 max-w-xs text-lg leading-relaxed">
+                Our AI scans your face and shows what can be improved.
+            </p>
+            
+            <button id="analyzeBtn" class="hero-text bg-white border border-stone-300 shadow-sm text-stone-900 px-8 py-3 rounded-full w-max mt-4 hover:bg-stone-50 transition-colors cursor-pointer">
+                Analyze Skin
+            </button>
+        </div>
+
+        <div class="absolute inset-0 flex justify-center items-end z-0 pointer-events-none">
+            <div class="relative w-full max-w-3xl h-[85%] flex justify-center items-end">
+                <img src="/static/model.png" alt="Skin Model" class="object-cover h-full object-bottom opacity-95">
+                
+                <div class="scanner-box absolute top-[22%] left-[58%] flex items-center gap-3">
+                    <div class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span></div>
+                    <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm"><span class="text-xs font-semibold tracking-wide text-stone-800">Uneven Tone</span></div>
+                </div>
+                
+                <div class="scanner-box absolute top-[52%] left-[28%] flex items-center gap-3 flex-row-reverse">
+                    <div class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span></div>
+                    <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm"><span class="text-xs font-semibold tracking-wide text-stone-800">Enlarged Pores</span></div>
+                </div>
+
+                <div class="scanner-box absolute top-[65%] left-[62%] flex items-center gap-3">
+                    <div class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-stone-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-stone-900 border-2 border-white"></span></div>
+                    <div class="px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-md border border-white/50 shadow-sm"><span class="text-xs font-semibold tracking-wide text-stone-800">Fine Lines</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10 w-1/3 flex flex-col items-end gap-12">
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-stone-900">95%</h3>
+                <p class="text-sm text-stone-500 max-w-[120px] ml-auto">accurate skin analysis</p>
+            </div>
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-stone-900">30+</h3>
+                <p class="text-sm text-stone-500 max-w-[120px] ml-auto">skin concerns analyzed</p>
+            </div>
+            <div class="text-right stat-item">
+                <h3 class="text-4xl font-normal text-stone-900">7-day</h3>
+                <p class="text-sm text-stone-500 max-w-[120px] ml-auto">personalized routine</p>
+            </div>
+        </div>
+    </section>
+
+    <main id="pipeline-workspace" class="max-w-4xl mx-auto px-4 py-24 min-h-screen">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-stone-900 mb-2">Diagnostic Pipeline</h2>
+            <p class="text-stone-500">Upload an image to run a localized scan against our vector database.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8 mb-8" id="uploadCard">
+            <form id="uploadForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-2">Affected Body Region</label>
+                    <select name="region" class="w-full bg-stone-50 border border-stone-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-900">
+                        <option value="cheeks">Cheeks / Face Patch</option>
+                        <option value="forehead">Forehead</option>
+                        <option value="full">Full Face / Wide Angle</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-2">Upload Skin Image</label>
+                    <input type="file" name="file" accept="image/*" required class="w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-stone-900 file:text-white hover:file:bg-stone-800 cursor-pointer">
+                </div>
+
+                <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 rounded-lg transition-colors cursor-pointer text-sm">
+                    Run Image Through Pipeline
+                </button>
+            </form>
+        </div>
+
+        <div id="loading" class="hidden text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-stone-200 border-t-stone-900 mb-4"></div>
+            <p class="text-sm text-stone-500 font-medium animate-pulse">Running geometric corrections, vector matching, and Gemini inference...</p>
+        </div>
+
+        <div id="results" class="hidden space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">Uploaded Sample</h3>
+                    <img id="previewImg" src="" class="w-full h-64 object-cover rounded-xl border border-stone-200 bg-stone-100 shadow-sm">
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-3">Vector RAG Matches</h3>
+                    <div id="matchesList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+                <h3 class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-4">Gemini Synthesized Report</h3>
+                <div id="analysisText" class="prose prose-stone max-w-none text-sm leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // A. GSAP Hero Animations
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+            tl.from(".hero-text", { y: 40, opacity: 0, duration: 1, stagger: 0.15, delay: 0.1 })
+              .from(".stat-item", { y: 40, opacity: 0, duration: 0.8, stagger: 0.15 }, "-=0.6")
+              .from(".scanner-box", { scale: 0.5, opacity: 0, duration: 0.7, stagger: 0.2, ease: "back.out(1.7)" }, "-=0.2");
+
+            gsap.to(".scanner-box", { y: -12, duration: 2.5, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: { amount: 1.5, from: "random" } });
+
+            // B. Scroll Button Logic
+            document.getElementById('analyzeBtn').addEventListener('click', () => {
+                const workspace = document.getElementById('pipeline-workspace');
+                if (workspace) {
+                    workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Highlight the box briefly
+                    setTimeout(() => {
+                        const uploadCard = document.getElementById('uploadCard');
+                        uploadCard.classList.add('ring-4', 'ring-stone-200', 'transition-all', 'duration-500');
+                        setTimeout(() => uploadCard.classList.remove('ring-4', 'ring-stone-200'), 1000);
+                    }, 600);
+                }
+            });
+
+            // C. Flask Form Submission Logic
+            document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const loading = document.getElementById('loading');
+                const results = document.getElementById('results');
+                
+                loading.classList.remove('hidden');
+                results.classList.add('hidden');
+                
+                try {
+                    const response = await fetch('/analyze', { method: 'POST', body: formData });
+                    const data = await response.json();
+                    
+                    loading.classList.add('hidden');
+                    
+                    if (data.success) {
+                        document.getElementById('previewImg').src = data.image_url;
+                        document.getElementById('analysisText').textContent = data.analysis;
+                        
+                        const matchesList = document.getElementById('matchesList');
+                        matchesList.innerHTML = '';
+                        
+                        if (data.matches.length === 0) {
+                            matchesList.innerHTML = `<p class="text-sm text-stone-400 italic">No historical matches retrieved.</p>`;
+                        } else {
+                            data.matches.forEach(match => {
+                                const el = document.createElement('div');
+                                el.className = 'p-4 bg-stone-50 rounded-xl border border-stone-200 flex justify-between items-center';
+                                el.innerHTML = `<span class="font-semibold text-stone-800 text-sm">${match.class}</span><span class="text-xs bg-white border border-stone-200 px-2 py-1 rounded-md font-mono">${match.similarity}%</span>`;
+                                matchesList.appendChild(el);
+                            });
+                        }
+                        
+                        results.classList.remove('hidden');
+                        results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        alert('Pipeline Execution Failed: ' + data.error);
+                    }
+                } catch (error) {
+                    loading.classList.add('hidden');
+                    alert('Network Error: Unable to complete request.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
